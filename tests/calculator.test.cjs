@@ -1,7 +1,7 @@
 'use strict';
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
-const {calculate} = require('../calculator.js');
+const {calculate, solveRate} = require('../calculator.js');
 const base = {age:30,initial:1000000,contribution:10000,target:5000000,rate:5,inflation:2,period:'monthly',basis:'nominal'};
 test('annual return above 100 percent compounds correctly',()=>{
   const r=calculate({...base,initial:100,contribution:0,target:300,rate:200});
@@ -41,4 +41,22 @@ test('unreachable scenarios stop and report no fabricated success',()=>{
 });
 test('negative/nonfinite amounts, zero goal and invalid frequency are rejected',()=>{
   for(const patch of [{initial:-1},{contribution:NaN},{target:0},{rate:-100},{age:1.5},{period:'daily'},{basis:'unknown'}]) assert.throws(()=>calculate({...base,...patch}));
+});
+
+test('inverse return matches known four-year compound growth',()=>{
+ const r=solveRate({...base,initial:100,contribution:0,target:200,years:4});
+ assert.ok(Math.abs(r.requiredRate-(Math.pow(2,1/4)-1)*100)<1e-8); assert.equal(r.last.month,48);
+});
+test('inverse annual deposits and inflation match target at deadline',()=>{
+ for(const period of ['monthly','yearly']) for(const basis of ['nominal','real']) {
+ const r=solveRate({...base,period,basis,years:4});
+ assert.ok(Math.abs(r.last.balance-r.last.goal)<1e-5); assert.equal(r.last.month,48);
+ }
+});
+test('inverse solver supports negative and above-100 returns',()=>{
+ assert.ok(Math.abs(solveRate({...base,initial:100,contribution:0,target:50,years:1}).requiredRate+50)<1e-8);
+ assert.ok(Math.abs(solveRate({...base,initial:100,contribution:0,target:300,years:1}).requiredRate-200)<1e-8);
+});
+test('inverse solver rejects impossible final deposits and invalid deadlines',()=>{
+ for(const patch of [{initial:0,contribution:0},{initial:0,period:'yearly',years:1},{years:0},{years:101},{years:0.1}]) assert.throws(()=>solveRate({...base,years:4,...patch}));
 });

@@ -39,10 +39,18 @@ function run(event) {
   const input = Object.fromEntries(['age','initial','contribution','target','rate','inflation'].map(k => [k, Number($(k).value)]));
   input.period = period; input.basis = $('basis').value;
   try {
-    const result = FinancialGoal.calculate(input), last = result.last;
+    const reverse = $('mode').value === 'rate';
+    input.years = Number($('years').value);
+    const result = reverse ? FinancialGoal.solveRate(input) : FinancialGoal.calculate(input), last = result.last;
+    if (reverse) input.rate = result.requiredRate;
     $('error').hidden = true;
     $('result-label').textContent = result.reached ? '预计达标年龄' : '在当前假设下';
-    if (result.reached) {
+    if (reverse) {
+      $('result-label').textContent = '指定期限所需名义年化收益';
+      $('headline').innerHTML = `${result.requiredRate.toFixed(2)}<span> %${result.atLowerBound ? ' 或更低' : ''}</span>`;
+      $('result-summary').textContent = `按当前投入计划，在 ${duration(last.month)}后的月末达到目标，需保持以上固定年化收益。${result.atLowerBound ? '当前计算下限为 −99%，在此收益率下仍可达标。' : '显示值四舍五入；图表使用未舍入的收益率。'}`;
+      $('duration').textContent = `目标年龄 ${input.age + Math.floor(last.month / 12)} 岁${last.month % 12 ? ` ${last.month % 12} 个月` : ''}`;
+    } else if (result.reached) {
       const totalMonths = input.age * 12 + result.months;
       $('headline').innerHTML = `${Math.floor(totalMonths / 12)}<span> 岁${totalMonths % 12 ? ` ${totalMonths % 12} 个月` : ''}</span>`;
       $('result-summary').textContent = result.months === 0 ? '你目前的初始资金已经达到目标。' : `保持这份计划，预计在 ${duration(result.months)}后的月末首次达到目标。`;
@@ -79,8 +87,15 @@ document.querySelectorAll('[data-period]').forEach(button => button.addEventList
     hints(); $('result-label').textContent = '上次计算结果 · 参数已调整，请重新计算';
   }
 }));
+function syncMode() {
+  const reverse = $('mode').value === 'rate';
+  $('rate-field').hidden = reverse; $('rate').disabled = reverse;
+  $('years-field').hidden = !reverse; $('years').disabled = !reverse; $('years').required = reverse;
+  $('button-label').textContent = reverse ? '计算所需年化' : '计算达标年龄';
+}
+$('mode').addEventListener('change', syncMode);
 $('reset').addEventListener('click', () => {
-  form.reset(); period = 'monthly';
+  form.reset(); period = 'monthly'; syncMode();
   document.querySelectorAll('[data-period]').forEach(b => { const active = b.dataset.period === period; b.classList.toggle('selected', active); b.setAttribute('aria-pressed', String(active)); });
   run();
 });
