@@ -1,4 +1,4 @@
-# 慢慢有钱 · 财务目标计算器
+# 财务目标计算器
 
 **[打开在线计算器 →](https://zz11ss11zz.github.io/financial-goal-calculator/)**
 

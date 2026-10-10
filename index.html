@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用初始资金、持续投入、收益和通胀，计算达到财务目标的年龄。所有金额仅在浏览器计算。"><title>慢慢有钱 · 财务目标计算器</title><link rel="stylesheet" href="style.css"><script defer src="calculator.js"></script><script defer src="app.js"></script></head>
-<body><header><div class="header-brand"><a class="brand" href="./"><span class="brand-icon">↗</span> 慢慢有钱<span class="tag">财务目标计算器</span></a><button type="button" id="help-open" class="help-button" aria-haspopup="dialog">使用说明</button></div><span class="privacy">● 仅在你的浏览器计算</span></header>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用初始资金、持续投入、收益和通胀，计算达到财务目标的年龄。所有金额仅在浏览器计算。"><title>财务目标计算器</title><link rel="stylesheet" href="style.css"><script defer src="calculator.js"></script><script defer src="app.js"></script></head>
+<body><header><div class="header-brand"><a class="brand" href="https://github.com/zz11ss11zz/financial-goal-calculator"><span class="brand-icon">↗</span> 财务目标计算器</a><button type="button" id="help-open" class="help-button" aria-haspopup="dialog">使用说明</button></div><span class="privacy">● 仅在你的浏览器计算</span></header>
 <main><section class="intro"><span class="eyebrow">把未来，算得更清楚</span><h1>你的目标，<br>如何实现？</h1><p>从今天的积累出发，看看持续投入和复利，如何带你走向下一站。</p></section>
 <div class="workspace"><section class="panel inputs"><div class="section-title"><h2>我的计划</h2><button type="button" id="reset" class="text-button">恢复默认</button></div><form id="plan-form">
 <label for="mode">计算方式</label><select id="mode"><option value="time">给定年化 → 计算达标年龄</option><option value="rate">给定年限 → 计算所需年化</option></select>
@@ -16,7 +16,7 @@
 <div class="metrics"><article class="panel"><span>累计投入本金</span><strong id="principal">—</strong></article><article class="panel"><span>累计投资收益</span><strong id="gains">—</strong></article><article class="panel"><span>达标资产的今天购买力</span><strong id="purchasing">—</strong></article></div>
 <section class="panel chart-panel"><div class="section-title"><h2>积累的轨迹</h2><div class="legend"><span class="line-key">资产总额</span><span class="dash-key">目标金额</span></div></div><div id="chart"></div><p class="chart-note">横轴为年龄，纵轴为人民币万元；目标口径为今天购买力时，目标线随通胀增长。</p></section>
 <section class="panel details"><details><summary>展开逐年明细与计算假设</summary><p id="assumptions"></p><div class="table-wrap"><table><thead><tr><th>经过时间</th><th>年龄</th><th>累计本金</th><th>资产总额</th><th>今天购买力</th></tr></thead><tbody id="year-table"></tbody></table></div><p>收益率为固定情景假设，不预测市场波动；不计税费、提款或投入额随通胀增长。最多计算 100 年。达标按月末判断，年龄按满月表示。图表与表格金额四舍五入展示。</p></details></section>
-</section></div><footer>不必一次看见终点，先把下一步算清楚。<br><span>金额在本页浏览器内处理，不接入券商、不上传输入、不使用分析追踪。</span></footer></main>
+</section></div></main>
 <dialog id="help-dialog" aria-labelledby="help-title">
 <div class="help-heading"><div><span class="eyebrow">第一次用？从这里开始</span><h2 id="help-title">把你的财务目标算明白</h2></div><button type="button" id="help-close" class="help-close" aria-label="关闭使用说明" autofocus>×</button></div>
 <div class="help-content">
