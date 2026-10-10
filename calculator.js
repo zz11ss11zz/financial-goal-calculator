@@ -3,7 +3,7 @@
   function calculate(input) {
     const {age, initial, contribution, target, rate, inflation, period, basis} = input;
     if (![age, initial, contribution, target, rate, inflation].every(Number.isFinite)) throw new Error('请填写有效数字。');
-    if (!Number.isInteger(age) || age < 0 || age > 100 || initial < 0 || contribution < 0 || target <= 0 || Math.max(initial, contribution, target) > 1e12 || rate < -99 || rate > 100 || inflation < -10 || inflation > 30) throw new Error('请检查输入范围：金额不可为负，目标需大于零，年龄为 0–100 岁整数。');
+    if (!Number.isInteger(age) || age < 0 || age > 100 || initial < 0 || contribution < 0 || target <= 0 || Math.max(initial, contribution, target) > 1e12 || rate < -99 || inflation < -10 || inflation > 30) throw new Error('请检查输入范围：金额不可为负，目标需大于零，年龄为 0–100 岁整数。');
     if (!['monthly', 'yearly'].includes(period) || !['nominal', 'real'].includes(basis)) throw new Error('投入频率或目标口径无效。');
     const growth = Math.exp(Math.log1p(rate / 100) / 12);
     const inflationGrowth = Math.exp(Math.log1p(inflation / 100) / 12);

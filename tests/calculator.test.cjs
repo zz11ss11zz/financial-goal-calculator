@@ -3,6 +3,10 @@ const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {calculate} = require('../calculator.js');
 const base = {age:30,initial:1000000,contribution:10000,target:5000000,rate:5,inflation:2,period:'monthly',basis:'nominal'};
+test('annual return above 100 percent compounds correctly',()=>{
+  const r=calculate({...base,initial:100,contribution:0,target:300,rate:200});
+  assert.equal(r.months,12); assert.ok(Math.abs(r.last.balance-300)<1e-9);
+});
 test('zero-return monthly saving reaches exact target after 12 deposits',()=>{
   const r=calculate({...base,initial:100,contribution:10,target:220,rate:0});
   assert.equal(r.months,12); assert.equal(r.last.balance,220); assert.equal(r.last.principal,220);
