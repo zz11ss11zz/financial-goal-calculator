@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用初始资金、持续投入、收益和通胀，计算达到财务目标的年龄。所有金额仅在浏览器计算。"><title>慢慢有钱 · 财务目标计算器</title><link rel="stylesheet" href="style.css"><script defer src="calculator.js"></script><script defer src="app.js"></script></head>
-<body><header><a class="brand" href="./"><span class="brand-icon">↗</span> 慢慢有钱<span class="tag">财务目标计算器</span></a><span class="privacy">● 仅在你的浏览器计算</span></header>
+<body><header><div class="header-brand"><a class="brand" href="./"><span class="brand-icon">↗</span> 慢慢有钱<span class="tag">财务目标计算器</span></a><button type="button" id="help-open" class="help-button" aria-haspopup="dialog">使用说明</button></div><span class="privacy">● 仅在你的浏览器计算</span></header>
 <main><section class="intro"><span class="eyebrow">把未来，算得更清楚</span><h1>你的目标，<br>如何实现？</h1><p>从今天的积累出发，看看持续投入和复利，如何带你走向下一站。</p></section>
 <div class="workspace"><section class="panel inputs"><div class="section-title"><h2>我的计划</h2><button type="button" id="reset" class="text-button">恢复默认</button></div><form id="plan-form">
 <label for="mode">计算方式</label><select id="mode"><option value="time">给定年化 → 计算达标年龄</option><option value="rate">给定年限 → 计算所需年化</option></select>
@@ -16,4 +16,30 @@
 <div class="metrics"><article class="panel"><span>累计投入本金</span><strong id="principal">—</strong></article><article class="panel"><span>累计投资收益</span><strong id="gains">—</strong></article><article class="panel"><span>达标资产的今天购买力</span><strong id="purchasing">—</strong></article></div>
 <section class="panel chart-panel"><div class="section-title"><h2>积累的轨迹</h2><div class="legend"><span class="line-key">资产总额</span><span class="dash-key">目标金额</span></div></div><div id="chart"></div><p class="chart-note">横轴为年龄，纵轴为人民币万元；目标口径为今天购买力时，目标线随通胀增长。</p></section>
 <section class="panel details"><details><summary>展开逐年明细与计算假设</summary><p id="assumptions"></p><div class="table-wrap"><table><thead><tr><th>经过时间</th><th>年龄</th><th>累计本金</th><th>资产总额</th><th>今天购买力</th></tr></thead><tbody id="year-table"></tbody></table></div><p>收益率为固定情景假设，不预测市场波动；不计税费、提款或投入额随通胀增长。最多计算 100 年。达标按月末判断，年龄按满月表示。图表与表格金额四舍五入展示。</p></details></section>
-</section></div><footer>不必一次看见终点，先把下一步算清楚。<br><span>金额在本页浏览器内处理，不接入券商、不上传输入、不使用分析追踪。</span></footer></main></body></html>
+</section></div><footer>不必一次看见终点，先把下一步算清楚。<br><span>金额在本页浏览器内处理，不接入券商、不上传输入、不使用分析追踪。</span></footer></main>
+<dialog id="help-dialog" aria-labelledby="help-title">
+<div class="help-heading"><div><span class="eyebrow">第一次用？从这里开始</span><h2 id="help-title">把你的财务目标算明白</h2></div><button type="button" id="help-close" class="help-close" aria-label="关闭使用说明" autofocus>×</button></div>
+<div class="help-content">
+<p>这个计算器帮你回答两个问题：<strong>“多久能攒到目标金额？”</strong>和<strong>“想在几年内达标，需要多高的收益？”</strong></p>
+<h3>① 先选你想问的问题</h3>
+<p><strong>给定年化 → 计算达标年龄：</strong>如果你想假设投资每年增长 5%，就填「预计年化收益」为 5，计算器会告诉你何时达标。</p>
+<p><strong>给定年限 → 计算所需年化：</strong>如果你想在 4 年内达标，就填「目标年限」为 4，计算器会反算所需收益率。这两个条件二选一，不需要同时填写。</p>
+<h3>② 填上你的起点和计划</h3>
+<dl><dt>当前年龄</dt><dd>你现在多少岁，用来把“还需几年”换成“几岁达标”。</dd>
+<dt>初始资金</dt><dd>现在准备用来实现目标的钱，不是未来的收入。例如 100 万元填写 1000000。</dd>
+<dt>持续投入</dt><dd>以后每月或每年额外拿出来投资的钱。例如每月 1 万元填写 10000，并选「每月」。切换为「每年」时，会自动换成全年合计 120000 元。每月投入按月末算，每年投入按年末算。</dd>
+<dt>目标资金</dt><dd>你希望积累到的总金额。例如 500 万元填写 5000000。这里的金额都用人民币元。</dd>
+<dt>预计年化收益</dt><dd>假设一年后的增长比例。例如 100 元增长到 105 元，年化收益就是 5%，填写 5，不是 0.05。收益会继续参与增长，这就是复利。</dd>
+<dt>目标年限</dt><dd>希望从现在开始多久达标。例如 4 填写为 4 年，4.5 为 4 年 6 个月。请按整月填写，最多 100 年。</dd>
+<dt>年化通胀</dt><dd>物价每年的上涨比例。例如 2% 意味着今天 100 元能买的东西，一年后大约要花 102 元。</dd></dl>
+<h3>③ 分清“金额”与“购买力”</h3>
+<p><strong>未来金额：</strong>只要账户数字达到 500 万就算达标。通胀不改变达标时间，但会影响这些钱能买多少东西。</p>
+<p><strong>今天购买力：</strong>要求未来的钱还能买到今天 500 万能买的东西。假设通胀 2%，4 年后需要的金额约为 541.22 万元。</p>
+<h3>④ 点击计算，读懂结果</h3>
+<p>大字显示<strong>达标年龄</strong>或<strong>所需年化</strong>。下面的“累计投入本金”是你自己放进去的钱，“累计投资收益”是增长的部分，“今天购买力”是扣除通胀影响后的金额。图表展示资产和目标的变化，展开明细可查看逐年数字。</p>
+<div class="help-example"><strong>用默认参数试一次</strong><p>30 岁、初始 100 万、每月投 1 万、目标 500 万，选「未来金额」：</p><ul><li>假设年化 5%，预计在 <strong>45 岁 10 个月</strong>达标。</li><li>如果要求 4 年内达标，所需固定年化约为 <strong>41.24%</strong>。这个数字说明目标对收益的要求，并不代表能够获得这样的回报。</li></ul></div>
+<h3>还要知道这几件事</h3>
+<p>修改参数后要重新点击计算；“恢复默认”会重置所有输入。刷新网页也会恢复默认值。</p>
+<p>计算假设收益率和投入金额固定，不计税费、市场涨跌、提款或退休后的开销。它算的是积累到目标的情景，不能判断退休后这笔钱能花多久。如果提示没有可复利本金或无法达标，可以增加投入、延长期限或调整目标。</p>
+</div><button type="button" id="help-done" class="calculate">明白了，开始计算 <span>↗</span></button>
+</dialog></body></html>

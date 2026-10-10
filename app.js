@@ -100,3 +100,10 @@ $('reset').addEventListener('click', () => {
   run();
 });
 run();
+
+const helpDialog = $('help-dialog');
+$('help-open').addEventListener('click', () => helpDialog.showModal());
+function closeHelp() { helpDialog.close(); $('help-open').focus(); }
+$('help-close').addEventListener('click', closeHelp);
+$('help-done').addEventListener('click', closeHelp);
+helpDialog.addEventListener('cancel', event => { event.preventDefault(); closeHelp(); });
